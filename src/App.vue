@@ -178,7 +178,7 @@ const {
   handleSearch, goToResult 
 } = useSearch(
   scale, translateX, translateY, 
-  drawingOptions, selectedDrawing, currentStation, loadSystemData, openDetailModal // ✨ 這裡多傳入 currentStation
+  drawingOptions, selectedDrawing, currentStation, loadSystemData, openDetailModal 
 );
 
 // ==========================================

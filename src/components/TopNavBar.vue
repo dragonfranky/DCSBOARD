@@ -17,6 +17,7 @@
       🖨️ 列印 PDF
     </button>
 
+    
     <button class="icon-btn" :class="{ 'active-mode': isAnnotationMode }" @click="$emit('toggle-annotation')" title="在圖紙上點擊以新增標註" style="margin-left: 15px;">
       💬 {{ isAnnotationMode ? '取消標註' : '新增對話框' }}
     </button>
@@ -31,6 +32,9 @@
         style="padding: 6px 10px; border-radius: 4px; border: 1px solid #ccc; width: 160px; font-size: 14px;"
       >
       <button @click="$emit('search')" class="icon-btn" title="搜尋設備">🔍</button>
+      <button @click="syncDatabase" class="sync-btn" title="讀取 data_source 資料夾並更新資料庫" style="margin-left: 10px;">
+      🔄 同步 DCS 參數
+      </button>
     </div>
 
     <button @click="$emit('add-drawing')" class="add-main-btn" style="margin-left: 10px;">➕ 新增圖紙</button>
@@ -69,6 +73,28 @@ const onDrawingChange = (e) => {
   emit('update:selectedDrawing', e.target.value);
   emit('load-system-data');
 }
+
+const syncDatabase = async () => {
+  if (!confirm('確定要更新資料庫嗎？\n請確認最新的 data_source 資料夾已放置於系統目錄下。\n(這將需要幾秒鐘的時間重新解析所有 EDF 與 Tuning 檔案)')) {
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/sync-db', { method: 'POST' });
+    const result = await res.json();
+    
+    if (res.ok && result.success) {
+      alert('✅ ' + result.message);
+      // 更新完成後，通知系統重新載入當前畫面資料
+      emit('load-system-data');
+    } else {
+      alert('❌ 更新失敗：' + result.error);
+    }
+  } catch (error) {
+    alert('伺服器連線錯誤，無法更新資料庫。');
+  }
+};
+
 </script>
 
 <style scoped>
@@ -81,6 +107,9 @@ const onDrawingChange = (e) => {
 .icon-btn:hover { background: #f0f0f0; }
 .delete-icon:hover { background: #fee; border-color: #e74c3c; color: #c0392b; }
 .active-mode { background-color: #f39c12 !important; color: white !important; border-color: #e67e22 !important; font-weight: bold; }
+
+.sync-btn { background: #f39c12; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.sync-btn:hover { background: #e67e22; }
 
 /* 列印時隱藏上方工具列 */
 @media print {
