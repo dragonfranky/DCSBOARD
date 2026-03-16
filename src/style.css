@@ -1,0 +1,112 @@
+/* ==========================================
+   ✨ 雙模式列印專用 CSS (自動排版) ✨
+   ========================================== */
+@media print {
+  html, body { background: white !important; overflow: visible !important; }
+
+  /* === 1. 主畫面列印模式 === */
+  body.print-main-mode .app-container > *:not(.main-workspace) { display: none !important; } 
+  body.print-main-mode .nav-bar { display: none !important; }
+  body.print-main-mode .detail-modal { display: none !important; } 
+  body.print-main-mode .reset-zoom-btn { display: none !important; }
+  body.print-main-mode .search-list-modal { display: none !important; }
+
+  body.print-main-mode .app-container,
+  body.print-main-mode .main-workspace,
+  body.print-main-mode .main-content,
+  body.print-main-mode .svg-viewport {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+  
+  body.print-main-mode .svg-wrapper {
+    display: block !important;
+    transform-origin: top left !important;
+    page-break-inside: avoid;
+  }
+
+  /* === 2. 彈出視窗 (詳細圖面) 列印模式 === */
+  body.print-modal-mode .app-container { display: none !important; } 
+  body.print-modal-mode .detail-modal:not(.is-printing-target) { display: none !important; } 
+  
+  body.print-modal-mode .is-printing-target {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    background: white !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  
+  /* 隱藏不需要的按鈕 */
+  body.print-modal-mode .is-printing-target .modal-header .close-btn,
+  body.print-modal-mode .is-printing-target .image-header button,
+  body.print-modal-mode .is-printing-target .image-header label,
+  body.print-modal-mode .is-printing-target .edit-box,
+  body.print-modal-mode .is-printing-target .icon-btn {
+    display: none !important;
+  }
+
+  body.print-modal-mode .is-printing-target .modal-body {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* ✨ 關鍵 1：把標題上方的 10mm 加回來了 (上、右、下、左) */
+  body.print-modal-mode .is-printing-target .modal-header {
+    display: block !important;
+    padding: 10mm 10mm 5px 10mm !important; /* 👈 這裡加上了上方 10mm */
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  body.print-modal-mode .is-printing-target .info-section,
+  body.print-modal-mode .is-printing-target .image-header {
+    display: block !important;
+    padding: 0 10mm !important; 
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  body.print-modal-mode .is-printing-target hr {
+    display: none !important;
+  }
+
+  body.print-modal-mode .is-printing-target .image-container {
+    display: block !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+
+  /* ✨ 關鍵 2：將畫布微調放大，填滿下方空白 */
+  body.print-modal-mode .is-printing-target .modal-svg-wrapper {
+    display: block !important;
+    width: 1000px !important; 
+    transform: none !important; 
+    transform-origin: top left !important;
+    zoom: 0.68 !important; /* 👈 從 0.65 調高到 0.68 */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin: 0 auto !important; 
+  }
+
+  body.print-modal-mode .is-printing-target .modal-img-wrapper,
+  body.print-modal-mode .is-printing-target .inline-svg svg {
+    width: 1000px !important; 
+    max-width: none !important; 
+    height: auto !important;
+    display: block !important;
+  }
+}
